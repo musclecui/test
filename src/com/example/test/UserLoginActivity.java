@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 public class UserLoginActivity extends Activity {
 
+	Menu menu;
 	Button btnLogin;
 	
 	@Override
@@ -127,7 +129,28 @@ public class UserLoginActivity extends Activity {
 	
 	
 	@Override
-	protected boolean onCreateOptionMenu {
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		this.menu = menu;
+		addMenu(menu);
+		addSubMenu(menu);
+
+		return super.onCreateOptionsMenu(menu);	
+	}
+	
+	private void addMenu(Menu menu) {
+
+		menu.add("菜单1");
+		menu.add("菜单2");
+		menu.add("菜单3");
+		menu.add("菜单4");
+		menu.add("菜单5");
+		menu.add("菜单6");
+		menu.add("菜单7");
+	}
+	
+	private void addSubMenu(Menu menu) {
 		
 	}
+	
 }
