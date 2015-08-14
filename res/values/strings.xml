@@ -15,5 +15,8 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="tip">提示信息</string>
+    <string name="ip">IP</string>
+    <string name="port">端口</string>
+    <string name="save">保存</string>
 
 </resources>

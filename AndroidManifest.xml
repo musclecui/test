@@ -23,7 +23,10 @@
         <activity
             android:name="com.example.test.ToDetVehActivity"
             android:label="@string/action_settings">
-        </activity>     
+        </activity>   
+        <activity
+            android:name="com.example.test.SettingActivity">
+        </activity>            
         <activity
             android:name="com.example.test.MainActivity"
             android:label="@string/app_name" >

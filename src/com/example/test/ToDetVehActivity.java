@@ -21,7 +21,7 @@ public class ToDetVehActivity extends Activity {
 		String s3 = bundle.getString("3");
 		int i4 = bundle.getInt("4");
 		String s = s1 + s2 + s3 + String.valueOf(i4);
-		EditText ed = (EditText)findViewById(R.id.editText1);
+		EditText ed = (EditText)findViewById(R.id.edIp);
 		ed.setText(s);
 		Log.i("Ω” ’µΩ", s);
 		
