@@ -35,7 +35,7 @@ public class UserLoginActivity extends Activity {
 
 		btnLogin.setOnClickListener(new OnClickListener() {
 
-			@Override
+//			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
@@ -151,7 +151,7 @@ public class UserLoginActivity extends Activity {
 
 		this.menu = menu;
 		addMenu(menu);
-		addSubMenu(menu);
+//		addSubMenu(menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -159,7 +159,7 @@ public class UserLoginActivity extends Activity {
 	private void addMenu(Menu menu) {
 
 		MenuItem addMenuItem = menu.add(1, menuItemId++, 1, "…Ë÷√");
-		addMenuItem.setIcon(R.drawable.plus);
+		addMenuItem.setIcon(R.drawable.delete);
 //		// addMenuItem.setOnMenuItemClickListener(UserLoginActivity.this);
 //		MenuItem deleteMenuItem = menu.add(1, menuItemId++, 2, "…æ≥˝");
 //		deleteMenuItem.setIcon(R.drawable.close_delete);
