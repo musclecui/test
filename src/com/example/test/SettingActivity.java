@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 	
-	String modName = "设置"; // 模块名
+	private static final String modName = "设置"; // 模块名
 	Button btnSave;
 	Button btnCancel;
 	EditText edIp;

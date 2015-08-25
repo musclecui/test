@@ -3,12 +3,16 @@ package com.example.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.cyx.lib.ShaPreOpe;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +20,20 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserLoginActivity extends Activity {
 
+	private static final String modName = "用户登录"; // 模块名
 	Button btnLogin;
+	EditText edUserName;
+	EditText edPassword;
 	Menu menu;
 	private int menuItemId = Menu.FIRST;
+	ShaPreOpe shaPreOpe;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +41,42 @@ public class UserLoginActivity extends Activity {
 		setContentView(R.layout.activity_user_login);
 
 		btnLogin = (Button) findViewById(R.id.btnLogin);
+		edUserName = (EditText) findViewById(R.id.edUserName);
+		edPassword = (EditText) findViewById(R.id.edPassword);
+		
+		shaPreOpe = new ShaPreOpe(this);
 
 		btnLogin.setOnClickListener(new OnClickListener() {
 
-//			@Override
+			// @Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+
+				if (TextUtils.isEmpty(edUserName.getText().toString())) {
+					Toast.makeText(UserLoginActivity.this, "用户名不能为空",
+							Toast.LENGTH_SHORT).show();
+					edUserName.setFocusable(true);
+					edUserName.requestFocus();
+					return;
+				}
+				if (TextUtils.isEmpty(edPassword.getText().toString())) {
+					Toast.makeText(UserLoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+					edPassword.setFocusable(true);
+					edPassword.requestFocus();
+					return;
+				}
+				if (TextUtils.isEmpty(shaPreOpe.read("ip", ""))
+						|| TextUtils.isEmpty(shaPreOpe.read("port", ""))) {
+					Toast.makeText(UserLoginActivity.this,
+							"服务器参数（ip或端口）为空，请设置", Toast.LENGTH_SHORT).show();
+					return;
+				}
 
 				SimpleDateFormat df = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm:ss");
 
+				
+				
 				LayoutInflater inflater = (LayoutInflater) UserLoginActivity.this
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				final View vPopupWin = inflater.inflate(R.layout.dialog_popup,
@@ -79,6 +114,8 @@ public class UserLoginActivity extends Activity {
 					}
 				});
 				pw.showAtLocation(v, Gravity.CENTER, 0, 0);
+				
+				
 
 				// SimpleDateFormat df = new
 				// SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 设置日期格式
@@ -151,7 +188,7 @@ public class UserLoginActivity extends Activity {
 
 		this.menu = menu;
 		addMenu(menu);
-//		addSubMenu(menu);
+		// addSubMenu(menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -160,13 +197,13 @@ public class UserLoginActivity extends Activity {
 
 		MenuItem addMenuItem = menu.add(1, menuItemId++, 1, "设置");
 		addMenuItem.setIcon(R.drawable.delete);
-//		// addMenuItem.setOnMenuItemClickListener(UserLoginActivity.this);
-//		MenuItem deleteMenuItem = menu.add(1, menuItemId++, 2, "删除");
-//		deleteMenuItem.setIcon(R.drawable.close_delete);
-//		// deleteMenuItem.setOnMenuItemClickListener(this);
-//		MenuItem menuItem1 = menu.add(1, menuItemId++, 3, "菜单1");
-//		// menuItem1.setOnMenuItemClickListener(this);
-//		MenuItem menuItem2 = menu.add(1, menuItemId++, 4, "菜单2");
+		// // addMenuItem.setOnMenuItemClickListener(UserLoginActivity.this);
+		// MenuItem deleteMenuItem = menu.add(1, menuItemId++, 2, "删除");
+		// deleteMenuItem.setIcon(R.drawable.close_delete);
+		// // deleteMenuItem.setOnMenuItemClickListener(this);
+		// MenuItem menuItem1 = menu.add(1, menuItemId++, 3, "菜单1");
+		// // menuItem1.setOnMenuItemClickListener(this);
+		// MenuItem menuItem2 = menu.add(1, menuItemId++, 4, "菜单2");
 	}
 
 	private void addSubMenu(Menu menu) {
@@ -188,11 +225,12 @@ public class UserLoginActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-
 		Log.d("你点击了", String.valueOf(item.getItemId()));
-//		new AlertDialog.Builder(UserLoginActivity.this).setMessage("你点击了“"+item.getTitle()+"”").show();
-		Toast.makeText(this, "你点击了“"+item.getTitle()+"”", Toast.LENGTH_SHORT).show();
-		
+		// new
+		// AlertDialog.Builder(UserLoginActivity.this).setMessage("你点击了“"+item.getTitle()+"”").show();
+		Toast.makeText(this, "你点击了“" + item.getTitle() + "”",
+				Toast.LENGTH_SHORT).show();
+
 		switch (item.getItemId()) {
 		case 1:
 			settingMenuItemSelected();
@@ -204,17 +242,31 @@ public class UserLoginActivity extends Activity {
 		case 4:
 			break;
 		case 5:
-			break;	
+			break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 
 		return true;
 	}
-	
+
 	private void settingMenuItemSelected() {
 
-		 startActivity(new Intent(UserLoginActivity.this, SettingActivity.class));
+		startActivity(new Intent(UserLoginActivity.this, SettingActivity.class));
 	}
-
+	
+    // 拦截/屏蔽返回键、菜单键实现代码
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) { 
+        	//监控/拦截/屏蔽返回键
+            return false;
+        } else if(keyCode == KeyEvent.KEYCODE_MENU) {
+            //监控/拦截菜单键
+        	return false;
+        } else if(keyCode == KeyEvent.KEYCODE_HOME) {
+            //由于Home键为系统键，此处不能捕获，需要重写onAttachedToWindow()
+        }
+        return super.onKeyDown(keyCode, event);
+    }	
 }
