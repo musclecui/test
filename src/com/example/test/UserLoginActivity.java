@@ -3,7 +3,9 @@ package com.example.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.cyx.lib.ContextUtil;
 import com.cyx.lib.ShaPreOpe;
+import com.example.test.webservice.WebService;
 
 import android.app.Activity;
 import android.content.Context;
@@ -44,7 +46,7 @@ public class UserLoginActivity extends Activity {
 		edUserName = (EditText) findViewById(R.id.edUserName);
 		edPassword = (EditText) findViewById(R.id.edPassword);
 		
-		shaPreOpe = new ShaPreOpe(this);
+		shaPreOpe = new ShaPreOpe(ContextUtil.getInstance());
 
 		btnLogin.setOnClickListener(new OnClickListener() {
 
@@ -72,6 +74,14 @@ public class UserLoginActivity extends Activity {
 					return;
 				}
 
+				String out = WebService.echoa("eng+中文a", "");
+//				String out = WebService.echow("eng+中文", "");
+				if (null == out) {
+					Log.d(UserLoginActivity.ACTIVITY_SERVICE, "空");
+				} else {
+					Log.d(UserLoginActivity.ACTIVITY_SERVICE, out);
+				}
+				
 				SimpleDateFormat df = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm:ss");
 
@@ -255,18 +265,18 @@ public class UserLoginActivity extends Activity {
 		startActivity(new Intent(UserLoginActivity.this, SettingActivity.class));
 	}
 	
-    // 拦截/屏蔽返回键、菜单键实现代码
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) { 
-        	//监控/拦截/屏蔽返回键
-            return false;
-        } else if(keyCode == KeyEvent.KEYCODE_MENU) {
-            //监控/拦截菜单键
-        	return false;
-        } else if(keyCode == KeyEvent.KEYCODE_HOME) {
-            //由于Home键为系统键，此处不能捕获，需要重写onAttachedToWindow()
-        }
-        return super.onKeyDown(keyCode, event);
-    }	
+//    // 拦截/屏蔽返回键、菜单键实现代码
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(keyCode == KeyEvent.KEYCODE_BACK) { 
+//        	//监控/拦截/屏蔽返回键
+//            return false;
+//        } else if(keyCode == KeyEvent.KEYCODE_MENU) {
+//            //监控/拦截菜单键
+//        	return false;
+//        } else if(keyCode == KeyEvent.KEYCODE_HOME) {
+//            //由于Home键为系统键，此处不能捕获，需要重写onAttachedToWindow()
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }	
 }

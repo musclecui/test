@@ -1,5 +1,6 @@
 package com.example.test;
 
+import com.cyx.lib.ContextUtil;
 import com.cyx.lib.ShaPreOpe;
 import com.example.test.R.string;
 
@@ -36,7 +37,7 @@ public class SettingActivity extends Activity {
 		edIp = (EditText)findViewById(R.id.edIp);
 		edPort = (EditText) findViewById(R.id.edPort);
 
-		shaPreOpe = new ShaPreOpe(this);
+		shaPreOpe = new ShaPreOpe(ContextUtil.getInstance());
 
 		edIp.setText(shaPreOpe.read("ip", ""));
 		edPort.setText(shaPreOpe.read("port", ""));
