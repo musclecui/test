@@ -3,11 +3,11 @@ package com.example.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.cyx.lib.ContextUtil;
-import com.cyx.lib.ShaPreOpe;
-import com.example.test.webservice.WebService;
+import com.cyx.lib.*;
+import com.example.test.webservice.*;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 public class UserLoginActivity extends Activity {
 
-	private static final String modName = "用户登录"; // 模块名
+	private static final String MOD_NAME = "用户登录"; // 模块名
 	Button btnLogin;
 	EditText edUserName;
 	EditText edPassword;
@@ -45,8 +45,14 @@ public class UserLoginActivity extends Activity {
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		edUserName = (EditText) findViewById(R.id.edUserName);
 		edPassword = (EditText) findViewById(R.id.edPassword);
-		
+
 		shaPreOpe = new ShaPreOpe(ContextUtil.getInstance());
+		
+		String lastUserName = shaPreOpe.read("username", "");
+		edUserName.setText(lastUserName);
+		if ("" != lastUserName) {
+			edPassword.requestFocus();
+		}
 
 		btnLogin.setOnClickListener(new OnClickListener() {
 
@@ -54,76 +60,81 @@ public class UserLoginActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				if (TextUtils.isEmpty(edUserName.getText().toString())) {
-					Toast.makeText(UserLoginActivity.this, "用户名不能为空",
-							Toast.LENGTH_SHORT).show();
-					edUserName.setFocusable(true);
+				String userName = edUserName.getText().toString();
+				String password = edPassword.getText().toString();
+
+				if (TextUtils.isEmpty(userName)) {
+					new AlertDialog.Builder(UserLoginActivity.this)
+							.setTitle(MOD_NAME).setMessage("用户名不能为空")
+							.setPositiveButton("确定", null).show();
 					edUserName.requestFocus();
 					return;
 				}
-				if (TextUtils.isEmpty(edPassword.getText().toString())) {
-					Toast.makeText(UserLoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
-					edPassword.setFocusable(true);
+				if (TextUtils.isEmpty(password)) {
+					new AlertDialog.Builder(UserLoginActivity.this)
+							.setTitle(MOD_NAME).setMessage("密码不能为空")
+							.setPositiveButton("确定", null).show();
 					edPassword.requestFocus();
 					return;
 				}
 				if (TextUtils.isEmpty(shaPreOpe.read("ip", ""))
 						|| TextUtils.isEmpty(shaPreOpe.read("port", ""))) {
-					Toast.makeText(UserLoginActivity.this,
-							"服务器参数（ip或端口）为空，请设置", Toast.LENGTH_SHORT).show();
+					new AlertDialog.Builder(UserLoginActivity.this)
+							.setTitle(MOD_NAME)
+							.setMessage("服务器参数（ip或端口）为空，请设置")
+							.setPositiveButton("确定", null).show();
 					return;
 				}
 
-				String out = WebService.echoa("eng+中文a", "");
-//				String out = WebService.echow("eng+中文", "");
-				if (null == out) {
-					Log.d(UserLoginActivity.ACTIVITY_SERVICE, "空");
+				WsErr err = new WsErr();
+				WebService.UserLogin(userName, password, GloVar.curUser, err);
+				if (err.errCode.equals("0")) {
+					// 登录成功
+
+					// 保存最近成功登录用户
+					shaPreOpe.write("username", userName);
+
+					Intent intent = new Intent(UserLoginActivity.this,
+							ToDetVehActivity.class);
+					startActivity(intent);
+					finish(); // 关闭本页面
 				} else {
-					Log.d(UserLoginActivity.ACTIVITY_SERVICE, out);
+					// 登录失败
+
+					new AlertDialog.Builder(UserLoginActivity.this)
+							.setTitle(MOD_NAME).setMessage(err.errMsg)
+							.setPositiveButton("确定", null).show();
 				}
 				
-				SimpleDateFormat df = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");
-
-				
-				
-				LayoutInflater inflater = (LayoutInflater) UserLoginActivity.this
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				final View vPopupWin = inflater.inflate(R.layout.dialog_popup,
-						null, false);
-				final PopupWindow pw = new PopupWindow(vPopupWin, 400, 200,
-						true);
-
-				Button btnOk = (Button) vPopupWin.findViewById(R.id.btnOk);
-				Button btnCancel = (Button) vPopupWin
-						.findViewById(R.id.btnCancel);
-				TextView tvTip = (TextView) vPopupWin.findViewById(R.id.tvTip);
-				tvTip.setText("test");
-
-				btnOk.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-
-						Date dt = new Date();
-						SimpleDateFormat df = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm:ss");
-						TextView tvTip = (TextView) vPopupWin
-								.findViewById(R.id.tvTip);
-						tvTip.setText(df.format(dt));
-
-					}
-				});
-				btnCancel.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						pw.dismiss();
-					}
-				});
-				pw.showAtLocation(v, Gravity.CENTER, 0, 0);
+//				LayoutInflater inflater = (LayoutInflater) UserLoginActivity.this
+//						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//				final View vPopupWin = inflater.inflate(
+//						R.layout.dialog_popup, null, false);
+//				final PopupWindow pw = new PopupWindow(vPopupWin, 600, 400,
+//						true);
+//				Button btnOk = (Button) vPopupWin.findViewById(R.id.btnOk);
+//				Button btnCancel = (Button) vPopupWin
+//						.findViewById(R.id.btnCancel);
+//				TextView tvTip = (TextView) vPopupWin
+//						.findViewById(R.id.tvTip);
+//				tvTip.setText(err.errMsg);
+//				btnOk.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						pw.dismiss();
+//					}
+//				});
+//				btnCancel.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						pw.dismiss();
+//					}
+//				});
+//				pw.showAtLocation(v, Gravity.CENTER, 0, 0);	
 				
 				
 
@@ -262,21 +273,21 @@ public class UserLoginActivity extends Activity {
 
 	private void settingMenuItemSelected() {
 
-		startActivity(new Intent(UserLoginActivity.this, SettingActivity.class));
+		startActivity(new Intent(this, SettingActivity.class));
 	}
-	
-//    // 拦截/屏蔽返回键、菜单键实现代码
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(keyCode == KeyEvent.KEYCODE_BACK) { 
-//        	//监控/拦截/屏蔽返回键
-//            return false;
-//        } else if(keyCode == KeyEvent.KEYCODE_MENU) {
-//            //监控/拦截菜单键
-//        	return false;
-//        } else if(keyCode == KeyEvent.KEYCODE_HOME) {
-//            //由于Home键为系统键，此处不能捕获，需要重写onAttachedToWindow()
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }	
+
+	// // 拦截/屏蔽返回键、菜单键实现代码
+	// @Override
+	// public boolean onKeyDown(int keyCode, KeyEvent event) {
+	// if(keyCode == KeyEvent.KEYCODE_BACK) {
+	// //监控/拦截/屏蔽返回键
+	// return false;
+	// } else if(keyCode == KeyEvent.KEYCODE_MENU) {
+	// //监控/拦截菜单键
+	// return false;
+	// } else if(keyCode == KeyEvent.KEYCODE_HOME) {
+	// //由于Home键为系统键，此处不能捕获，需要重写onAttachedToWindow()
+	// }
+	// return super.onKeyDown(keyCode, event);
+	// }
 }

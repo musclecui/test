@@ -24,8 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.test.ToDetVehActivity"
-            android:label="@string/action_settings">
+            android:name="com.example.test.ToDetVehActivity">
         </activity>   
         <activity
             android:name="com.example.test.SettingActivity">
