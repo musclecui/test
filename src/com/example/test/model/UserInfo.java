@@ -2,7 +2,7 @@ package com.example.test.model;
 
 public class UserInfo {
 
-	String userName; // 用户名
-	String password; // 密码
-	String realName; // 真实姓名
+	public String userName; // 用户名
+	public String password; // 密码
+	public String realName; // 真实姓名
 }

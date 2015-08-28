@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 
 import com.cyx.lib.ShaPreOpe;
 import com.cyx.lib.ContextUtil;
+import com.example.test.GloVar;
 import com.example.test.model.UserInfo;
 
 public class WebService {
@@ -42,7 +43,7 @@ public class WebService {
 	// 根节点
 	private static final String NODE_ROOT = "nhroot";
 	// 命令节点
-	private static final String NODE_CMD = "cmd";	
+	private static final String NODE_CMD = "cmd";
 	// 数据节点
 	private static final String NODE_DATA = "data";
 	// 数据属性-行数
@@ -83,13 +84,13 @@ public class WebService {
 			Element cmdNode = document.createElement(NODE_CMD);
 			cmdNode.setTextContent(CMD_USER_LOGIN);
 			// 添加到document
-			rootNode.appendChild(cmdNode);	
+			rootNode.appendChild(cmdNode);
 			// 建立数据节点
 			Element dataNode = document.createElement(NODE_DATA);
 			// 添加到document
 			rootNode.appendChild(dataNode);
-//			// 设置数据节点属性
-//			dataNode.setAttribute(ATTR_DATAROW, "0");
+			// // 设置数据节点属性
+			// dataNode.setAttribute(ATTR_DATAROW, "0");
 			// 其它数据
 			Element userNameNode = document.createElement("username");
 			userNameNode.setTextContent(userName);
@@ -119,8 +120,8 @@ public class WebService {
 
 		out = comApi(in);
 		if (null == out) {
-			err.errCode = err.ERR_CODE_CNT;
-			err.errMsg = err.ERR_MSG_CNT;
+			err.errCode = WsErr.ERR_CODE_CNT;
+			err.errMsg = WsErr.ERR_MSG_CNT;
 			return;
 		}
 
@@ -134,15 +135,32 @@ public class WebService {
 			// 得到根节点
 			Element root = document.getDocumentElement();
 			// 获取根节点中的所有的节点
-			NodeList nodeList = root.getElementsByTagName(NODE_ERRCODE);
-			if (null!=nodeList && 0!=nodeList.getLength()) {
-				Node node = nodeList.item(0);
+			NodeList errCodeList = root.getElementsByTagName(NODE_ERRCODE);
+			if (0 != errCodeList.getLength()) {
+				Node node = (Element)errCodeList.item(0);
 				err.errCode = node.getTextContent();
 			}
-			nodeList = root.getElementsByTagName(NODE_ERRMSG);
-			if (null!=nodeList && 0!=nodeList.getLength()) {
-				Node node = nodeList.item(0);
-				err.errMsg = "远程:"+node.getTextContent();
+			NodeList errMsgList = root.getElementsByTagName(NODE_ERRMSG);
+			if (0 != errMsgList.getLength()) {
+				Node node = errMsgList.item(0);
+				err.errMsg = "远程:" + node.getTextContent();
+			}
+			NodeList dataList = root.getElementsByTagName(NODE_DATA);
+			if (0 != dataList.getLength()) {
+                Node node = dataList.item(0);
+                NodeList childList = node.getChildNodes();
+                for (int i=0; i<childList.getLength(); ++i) {
+                	Node childNode =  childList.item(i);
+                	if (Node.ELEMENT_NODE == childNode.getNodeType()) {
+                		if ("username".equals(childNode.getNodeName())) {
+							GloVar.curUser.userName = childNode.getFirstChild()
+									.getNodeValue();
+						} else if ("realname".equals(childNode.getNodeName())) {
+							GloVar.curUser.realName = childNode.getFirstChild()
+									.getNodeValue();
+						}
+					}
+                }
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
