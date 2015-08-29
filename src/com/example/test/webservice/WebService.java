@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
 import com.cyx.lib.ShaPreOpe;
 import com.cyx.lib.ContextUtil;
 import com.example.test.GloVar;
-import com.example.test.model.UserInfo;
+import com.example.test.model.*;
 
 public class WebService {
 
@@ -173,6 +173,111 @@ public class WebService {
 	}
 
 	// 查询产品
+	public static void queryProduct(String proNum, ProInfo proInfo, WsErr err) {
+
+		String in = "";
+		String out = "";
+
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory
+				.newInstance();
+		// 创建xml
+		try {
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+			Document document = builder.newDocument();
+			// 建立根节点
+			Element rootNode = document.createElement(NODE_ROOT);
+			// 添加到document
+			document.appendChild(rootNode);
+			// 建立命令节点
+			Element cmdNode = document.createElement(NODE_CMD);
+			cmdNode.setTextContent(CMD_QUERY_PRODUCT);
+			// 添加到document
+			rootNode.appendChild(cmdNode);
+			// 建立数据节点
+			Element dataNode = document.createElement(NODE_DATA);
+			// 添加到document
+			rootNode.appendChild(dataNode);
+			// 其它数据
+			Element proNumNode = document.createElement("productnumber");
+			proNumNode.setTextContent(proNum);
+			dataNode.appendChild(proNumNode);
+
+			// 设置输出结果
+			DOMSource domSource = new DOMSource(document);
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer();
+			// 开始把Document映射到result
+			transformer.transform(domSource, result);
+
+			in = writer.toString();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			err.errCode = "1";
+			err.errMsg = "创建xml异常：" + e.getMessage();
+			return;
+		}
+
+		out = comApi(in);
+		if (null == out) {
+			err.errCode = WsErr.ERR_CODE_CNT;
+			err.errMsg = WsErr.ERR_MSG_CNT;
+			return;
+		}
+
+		// 解析xml
+		try {
+			// 得到DocumentBuilder对象
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			// 得到代表整个xml的Document对象
+			InputStream stream = new ByteArrayInputStream(out.getBytes("UTF-8"));
+			Document document = builder.parse(stream);
+			// 得到根节点
+			Element root = document.getDocumentElement();
+			// 获取根节点中的所有的节点
+			NodeList errCodeList = root.getElementsByTagName(NODE_ERRCODE);
+			if (0 != errCodeList.getLength()) {
+				Node node = (Element)errCodeList.item(0);
+				err.errCode = node.getTextContent();
+			}
+			NodeList errMsgList = root.getElementsByTagName(NODE_ERRMSG);
+			if (0 != errMsgList.getLength()) {
+				Node node = errMsgList.item(0);
+				err.errMsg = "远程:" + node.getTextContent();
+			}
+			NodeList dataList = root.getElementsByTagName(NODE_DATA);
+			if (0 != dataList.getLength()) {
+                Node node = dataList.item(0);
+                NodeList childList = node.getChildNodes();
+                for (int i=0; i<childList.getLength(); ++i) {
+                	Node childNode =  childList.item(i);
+                	if (Node.ELEMENT_NODE == childNode.getNodeType()) {
+                		if ("productnumber".equals(childNode.getNodeName())) {
+							proInfo.proNum = childNode.getFirstChild()
+									.getNodeValue();
+						} else if ("productname".equals(childNode.getNodeName())) {
+							proInfo.proName = childNode.getFirstChild()
+									.getNodeValue();
+						} else if ("productmodel".equals(childNode.getNodeName())) {
+							proInfo.proModel = childNode.getFirstChild()
+									.getNodeValue();
+						}
+					}
+                }
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println(e.toString());
+			err.errCode = "1";
+			err.errMsg = "解析xml异常：" + e.getMessage();
+			return;
+		}
+
+	}
 
 	// 发货登记
 

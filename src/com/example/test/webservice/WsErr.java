@@ -10,6 +10,8 @@ public class WsErr {
 	public String errMsg = "";
 	
 	// 常用错误定义
+	// 无错误
+	public static final String ERR_NO = "0";
 	// 连接异常
 	public static final String ERR_CODE_CNT = "1";
 	public static final String ERR_MSG_CNT = "连接异常：请检查网络配置、WiFi、服务器";

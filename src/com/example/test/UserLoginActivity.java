@@ -88,14 +88,14 @@ public class UserLoginActivity extends Activity {
 
 				WsErr err = new WsErr();
 				WebService.UserLogin(userName, password, GloVar.curUser, err);
-				if (err.errCode.equals("0")) {
+				if (err.errCode.equals(WsErr.ERR_NO)) {
 					// 登录成功
 
 					// 保存最近成功登录用户
 					shaPreOpe.write("username", userName);
 
 					Intent intent = new Intent(UserLoginActivity.this,
-							ToDetVehActivity.class);
+							QueProActivity.class);
 					startActivity(intent);
 					finish(); // 关闭本页面
 				} else {
