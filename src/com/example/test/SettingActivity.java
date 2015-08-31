@@ -22,8 +22,8 @@ public class SettingActivity extends Activity {
 	private static final String modName = "设置"; // 模块名
 	Button btnSave;
 	Button btnCancel;
-	EditText edIp;
-	EditText edPort;
+	EditText etIp;
+	EditText etPort;
 	
 	ShaPreOpe shaPreOpe;
 	
@@ -34,13 +34,13 @@ public class SettingActivity extends Activity {
 		
 		btnSave = (Button)findViewById(R.id.btnSave);
 		btnCancel = (Button)findViewById(R.id.btnCancel);
-		edIp = (EditText)findViewById(R.id.edIp);
-		edPort = (EditText) findViewById(R.id.edPort);
+		etIp = (EditText)findViewById(R.id.etIp);
+		etPort = (EditText) findViewById(R.id.etPort);
 
 		shaPreOpe = new ShaPreOpe(ContextUtil.getInstance());
 
-		edIp.setText(shaPreOpe.read("ip", ""));
-		edPort.setText(shaPreOpe.read("port", ""));
+		etIp.setText(shaPreOpe.read("ip", ""));
+		etPort.setText(shaPreOpe.read("port", ""));
 
 		btnSave.setOnClickListener(new ClickEvent());
 		btnCancel.setOnClickListener(new ClickEvent());
@@ -67,7 +67,7 @@ public class SettingActivity extends Activity {
 	
 	private void saveSetting() {
 		
-		String ip = edIp.getText().toString();
+		String ip = etIp.getText().toString();
 		ip.trim();
 		if (ip.equals("")) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -78,11 +78,11 @@ public class SettingActivity extends Activity {
 			builder.setPositiveButton("确定", null);
 			builder.create().show();
 
-			edIp.setFocusable(true);
-			edIp.requestFocus();
+			etIp.setFocusable(true);
+			etIp.requestFocus();
 			return;
 		}
-		String port = edPort.getText().toString();
+		String port = etPort.getText().toString();
 		port.trim();
 		if (port.equals("")) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -93,8 +93,8 @@ public class SettingActivity extends Activity {
 			builder.setPositiveButton("确定", null);
 			builder.create().show();
 
-			edPort.setFocusable(true);
-			edPort.requestFocus();
+			etPort.setFocusable(true);
+			etPort.requestFocus();
 			return;
 		}
 		final int intPort = Integer.parseInt(port);
@@ -109,8 +109,8 @@ public class SettingActivity extends Activity {
 			builder.setPositiveButton("确定", null);
 			builder.create().show();
 			
-			edPort.setFocusable(true);
-			edPort.requestFocus();
+			etPort.setFocusable(true);
+			etPort.requestFocus();
 			return;
 		}
 		

@@ -268,6 +268,9 @@ public class WebService {
 						}
 					}
                 }
+			} else {
+				// 没有数据
+				proInfo = null;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

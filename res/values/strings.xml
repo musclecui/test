@@ -21,5 +21,10 @@
     <string name="pro_num">产品编号</string>
     <string name="query">查  询</string>
     <string name="clear">清  空</string>
+    <string name="capture_title">条形码/二维码扫描</string>
+    <string name="back">返回</string>
+    <string name="light_on">开灯</string>
+    <string name="scan">扫 描</string>
+    <string name="light_off">光灯</string>
 
 </resources>

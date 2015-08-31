@@ -27,7 +27,7 @@ public class ToDetVehActivity extends Activity {
 
 		String s = "当前登录用户：" + GloVar.curUser.userName + ","
 				+ GloVar.curUser.realName;
-		EditText ed = (EditText) findViewById(R.id.edIp);
+		EditText ed = (EditText) findViewById(R.id.etIp);
 		 ed.setText(s);
 
 		Button btnClose = (Button) findViewById(R.id.btnClose);

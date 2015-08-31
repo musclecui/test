@@ -31,8 +31,8 @@ public class UserLoginActivity extends Activity {
 
 	private static final String MOD_NAME = "用户登录"; // 模块名
 	Button btnLogin;
-	EditText edUserName;
-	EditText edPassword;
+	EditText etUserName;
+	EditText etPassword;
 	Menu menu;
 	private int menuItemId = Menu.FIRST;
 	ShaPreOpe shaPreOpe;
@@ -43,15 +43,15 @@ public class UserLoginActivity extends Activity {
 		setContentView(R.layout.activity_user_login);
 
 		btnLogin = (Button) findViewById(R.id.btnLogin);
-		edUserName = (EditText) findViewById(R.id.edUserName);
-		edPassword = (EditText) findViewById(R.id.edPassword);
+		etUserName = (EditText) findViewById(R.id.etUserName);
+		etPassword = (EditText) findViewById(R.id.etPassword);
 
 		shaPreOpe = new ShaPreOpe(ContextUtil.getInstance());
 		
 		String lastUserName = shaPreOpe.read("username", "");
-		edUserName.setText(lastUserName);
+		etUserName.setText(lastUserName);
 		if ("" != lastUserName) {
-			edPassword.requestFocus();
+			etPassword.requestFocus();
 		}
 
 		btnLogin.setOnClickListener(new OnClickListener() {
@@ -60,21 +60,21 @@ public class UserLoginActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				String userName = edUserName.getText().toString();
-				String password = edPassword.getText().toString();
+				String userName = etUserName.getText().toString();
+				String password = etPassword.getText().toString();
 
 				if (TextUtils.isEmpty(userName)) {
 					new AlertDialog.Builder(UserLoginActivity.this)
 							.setTitle(MOD_NAME).setMessage("用户名不能为空")
 							.setPositiveButton("确定", null).show();
-					edUserName.requestFocus();
+					etUserName.requestFocus();
 					return;
 				}
 				if (TextUtils.isEmpty(password)) {
 					new AlertDialog.Builder(UserLoginActivity.this)
 							.setTitle(MOD_NAME).setMessage("密码不能为空")
 							.setPositiveButton("确定", null).show();
-					edPassword.requestFocus();
+					etPassword.requestFocus();
 					return;
 				}
 				if (TextUtils.isEmpty(shaPreOpe.read("ip", ""))
@@ -169,12 +169,12 @@ public class UserLoginActivity extends Activity {
 				// });
 				// builder.create().show();
 
-				// EditText edUserName =
-				// (EditText)findViewById(R.id.edUserName);
-				// EditText edPassword =
-				// (EditText)findViewById(R.id.edPassword);
-				// String userName = edUserName.getText().toString();
-				// String password = edPassword.getText().toString();
+				// EditText etUserName =
+				// (EditText)findViewById(R.id.etUserName);
+				// EditText etPassword =
+				// (EditText)findViewById(R.id.etPassword);
+				// String userName = etUserName.getText().toString();
+				// String password = etPassword.getText().toString();
 				// String s = userName + password;
 				// Intent intent = new Intent(UserLoginActivity.this,
 				// ToDetVehActivity.class);
