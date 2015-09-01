@@ -12,6 +12,7 @@ import com.example.test.webservice.WsErr;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,15 +56,16 @@ public class QueProActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnScan:
+				onClick_Scan();
 				break;
 			case R.id.btnQuery:
-				OnClick_Query();
+				onClick_Query();
 				break;
 			case R.id.btnClear:
-				OnClick_Clear();
+				onClick_Clear();
 				break;
 			default:
-
+				break;
 			}
 		}
 	}
@@ -98,12 +100,15 @@ public class QueProActivity extends Activity {
 						android.R.id.text2 });
 		lvProInfo.setAdapter(adapter);
 	}
-	
-	void OnClick_Scan() {
 
+	void onClick_Scan() {
+		// 打开扫描界面扫描条形码或二维码
+		Intent openCameraIntent = new Intent(QueProActivity.this,
+				CaptureActivity.class);
+		startActivityForResult(openCameraIntent, 0);
 	}
 
-	void OnClick_Query() {
+	void onClick_Query() {
 		String proNum = etProNum.getText().toString();
 		proNum.trim();
 		if (proNum.equals("")) {
@@ -115,6 +120,15 @@ public class QueProActivity extends Activity {
 			return;
 		}
 
+		queryProInfo(proNum);
+	}
+
+	void onClick_Clear() {
+		etProNum.setText("");
+		setProInfo(null);
+	}
+
+	void queryProInfo(String proNum) {
 		ProInfo proInfo = new ProInfo();
 		WsErr err = new WsErr();
 		WebService.queryProduct(proNum, proInfo, err);
@@ -122,7 +136,7 @@ public class QueProActivity extends Activity {
 			if (null != proInfo) {
 				setProInfo(proInfo);
 			} else {
-				OnClick_Clear();
+				onClick_Clear();
 
 				final String msg = "没有产品编号:" + proNum + "的信息";
 				new AlertDialog.Builder(this).setTitle(MOD_NAME)
@@ -136,8 +150,15 @@ public class QueProActivity extends Activity {
 		}
 	}
 
-	void OnClick_Clear() {
-		etProNum.setText("");
-		setProInfo(null);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		// 处理扫描结果（在界面上显示）
+		if (resultCode == RESULT_OK) {
+			Bundle bundle = data.getExtras();
+			String scanResult = bundle.getString("result");
+			etProNum.setText(scanResult);
+			onClick_Query();
+		}
 	}
 }

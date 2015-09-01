@@ -9,8 +9,15 @@
         android:targetSdkVersion="19" />
     <!-- 访问网络的权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
-    <application
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    
+<application
         android:allowBackup="true"
         android:icon="@drawable/vote_yes"
         android:label="@string/app_name"
@@ -24,14 +31,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.test.ToDetVehActivity">
+            android:name="com.example.test.FunSelActivity">
         </activity>   
         <activity
             android:name="com.example.test.SettingActivity">
         </activity>            
         <activity
             android:name="com.example.test.QueProActivity">
-        </activity>                
+        </activity>       
+        <activity
+            android:name="com.example.test.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden" >            
+        </activity>                     
         <activity
             android:name="com.example.test.MainActivity"
             android:label="@string/app_name" >

@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -46,22 +47,22 @@ public class CaptureActivity extends Activity implements Callback {
 	private static final float BEEP_VOLUME = 0.10f;
 	private boolean vibrate;
 	private Button btn_cancel_scan;
-	private Button btn_open_light = null; //开灯
+	private Button btn_open_light = null; // 开灯
 	private Camera camera;
 	private Parameters parameter;
-	private boolean isOpen = true; // 控制开关灯
 
-//	public ControlActivity activity;
-	
+	// public ControlActivity activity;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.camera);
-		//ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
+		// ViewUtil.addTopView(getApplicationContext(), this,
+		// R.string.scan_card);
 		btn_open_light = (Button) findViewById(R.id.id_open_light);
 		btn_open_light.setOnClickListener(openListener);
-		//初始化CameraManager
+		// 初始化CameraManager
 		CameraManager.init(getApplication());
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		btn_cancel_scan = (Button) this.findViewById(R.id.id_cancel_scan);
@@ -77,20 +78,23 @@ public class CaptureActivity extends Activity implements Callback {
 		public void onClick(View v) {
 			camera = CameraManager.getCamera();
 			parameter = camera.getParameters();
-			// TODO 开灯
-			if (isOpen) {		
-				btn_open_light.setText("关\t灯");
+
+			final String lightOn = getResources().getString(R.string.light_on);
+			final String lightOff = getResources().getString(R.string.light_off);
+			final String btnText = btn_open_light.getText().toString();
+			
+			if (lightOn == btnText) {
+				btn_open_light.setText(R.string.light_off);
 				parameter.setFlashMode(Parameters.FLASH_MODE_TORCH);
-				camera.setParameters(parameter);				
-				isOpen = false;
-			} else {  // 关灯
-				btn_open_light.setText("开\t灯");
+				camera.setParameters(parameter);
+			} else { // 关灯
+				btn_open_light.setText(R.string.light_on);
 				parameter.setFlashMode(Parameters.FLASH_MODE_OFF);
 				camera.setParameters(parameter);
-				isOpen = true;
 			}
 		}
 	};
+
 	/**
 	 * 覆盖onResume的方法，初始化摄像头
 	 * */
@@ -116,16 +120,17 @@ public class CaptureActivity extends Activity implements Callback {
 		}
 		initBeepSound();
 		vibrate = true;
-		
-		//quit the scan view
+
+		// quit the scan view
 		btn_cancel_scan.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				CaptureActivity.this.finish();
 			}
 		});
 	}
+
 	/**
 	 * 停止与关闭摄像头
 	 * */
@@ -144,37 +149,36 @@ public class CaptureActivity extends Activity implements Callback {
 		inactivityTimer.shutdown();
 		super.onDestroy();
 	}
+
 	/**
-	 *  处理扫描结果
-	 * @param result 结果信息（条码存储的内容、编码方式）
-	 * @param barcode	图像
+	 * 处理扫描结果
+	 * 
+	 * @param result
+	 *            结果信息（条码存储的内容、编码方式）
+	 * @param barcode
+	 *            图像
 	 * */
 	public void handleDecode(Result result, Bitmap barcode) {
 		inactivityTimer.onActivity();
 		playBeepSoundAndVibrate();
 		String resultString = result.getText();
-		QueProActivity.instance.finish();	
-		//FIXME
+		// FIXME
 		if (resultString.equals("")) {
-			Toast.makeText(CaptureActivity.this, "扫描失败", Toast.LENGTH_SHORT).show();
-			finish();
-		}else {
+			Toast.makeText(CaptureActivity.this, "扫描失败", Toast.LENGTH_SHORT)
+					.show();
+		} else {
 			Intent resultIntent = new Intent();
 			Bundle bundle = new Bundle();
-			bundle.putString("scanResult", resultString);
-			bundle.putBoolean("isCapture", true);
+			bundle.putString("result", resultString);
 			resultIntent.putExtras(bundle);
 			this.setResult(RESULT_OK, resultIntent);
-			resultIntent.setClass(CaptureActivity.this, QueProActivity.class);
-				
-			CaptureActivity.this.finish();
-			startActivity(resultIntent);
 		}
+		CaptureActivity.this.finish();
 	}
 
 	private void initCamera(SurfaceHolder surfaceHolder) {
 		try {
-			CameraManager.get().openDriver(surfaceHolder); //打开摄像头
+			CameraManager.get().openDriver(surfaceHolder); // 打开摄像头
 		} catch (IOException ioe) {
 			return;
 		} catch (RuntimeException e) {
@@ -214,6 +218,7 @@ public class CaptureActivity extends Activity implements Callback {
 	public Handler getHandler() {
 		return handler;
 	}
+
 	/**
 	 * 画surfaceView的样式,并摄像,自动对焦功能
 	 * */
@@ -266,19 +271,19 @@ public class CaptureActivity extends Activity implements Callback {
 			mediaPlayer.seekTo(0);
 		}
 	};
-	
+
 	/**
 	 * 返回键，退出
 	 * */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-//			Intent intent = new Intent();
-//			intent.setClass(CaptureActivity.this, ControlActivity.class);
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// Intent intent = new Intent();
+			// intent.setClass(CaptureActivity.this, ControlActivity.class);
 			finish();
-//			startActivity(intent);
+			// startActivity(intent);
 			return true;
-		}    	
+		}
 		return super.onKeyDown(keyCode, event);
 	}
 

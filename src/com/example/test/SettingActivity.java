@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 	
-	private static final String modName = "设置"; // 模块名
+	private static final String MOD_NAME = "设置"; // 模块名
 	Button btnSave;
 	Button btnCancel;
 	EditText etIp;
@@ -72,7 +72,7 @@ public class SettingActivity extends Activity {
 		if (ip.equals("")) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					SettingActivity.this);
-			builder.setTitle(modName);
+			builder.setTitle(MOD_NAME);
 			builder.setIcon(R.drawable.home);
 			builder.setMessage("请输入IP");
 			builder.setPositiveButton("确定", null);
@@ -87,7 +87,7 @@ public class SettingActivity extends Activity {
 		if (port.equals("")) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					SettingActivity.this);
-			builder.setTitle(modName);
+			builder.setTitle(MOD_NAME);
 			builder.setIcon(R.drawable.home);
 			builder.setMessage("请输入端口");
 			builder.setPositiveButton("确定", null);
@@ -103,7 +103,7 @@ public class SettingActivity extends Activity {
 		if (intPort<minPort || intPort>maxPort){
 			String msg = "端口只能是" + String.valueOf(minPort) + "~" + String.valueOf(maxPort);
 			AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
-			builder.setTitle(modName);
+			builder.setTitle(MOD_NAME);
 			builder.setIcon(R.drawable.home);
 			builder.setMessage(msg);
 			builder.setPositiveButton("确定", null);

@@ -8,12 +8,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class ToDetVehActivity extends Activity {
+public class FunSelActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_todet_veh);
+		setContentView(R.layout.activity_fun_sel);
 
 		// Bundle bundle = getIntent().getExtras();
 		// String s1 = bundle.getString("1");
