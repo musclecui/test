@@ -1,43 +1,63 @@
 package com.example.test;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.*;
 
 public class FunSelActivity extends Activity {
 
+	TextView tvLoginUser;
+	Button btnQueryProduct;
+	Button btnDeliveryRegister;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fun_sel);
 
-		// Bundle bundle = getIntent().getExtras();
-		// String s1 = bundle.getString("1");
-		// String s2 = bundle.getString("2");
-		// String s3 = bundle.getString("3");
-		// int i4 = bundle.getInt("4");
-		// String s = s1 + s2 + s3 + String.valueOf(i4);
-		// EditText ed = (EditText)findViewById(R.id.edIp);
-		// ed.setText(s);
-		// Log.i("接收到", s);
+		String s = "当前登录用户：" + GloVar.curUser.userName + "("
+				+ GloVar.curUser.realName + ")";
+		tvLoginUser = (TextView)findViewById(R.id.tvLoginUser);
+		tvLoginUser.setText(s);
 
-		String s = "当前登录用户：" + GloVar.curUser.userName + ","
-				+ GloVar.curUser.realName;
-		EditText ed = (EditText) findViewById(R.id.etIp);
-		 ed.setText(s);
-
-		Button btnClose = (Button) findViewById(R.id.btnClose);
-		btnClose.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});
+		btnQueryProduct = (Button) findViewById(R.id.btnQueryProduct);
+		btnDeliveryRegister = (Button) findViewById(R.id.btnDeliveryRegister);
+		
+		btnQueryProduct.setOnClickListener(new ClickEvent());
+		btnDeliveryRegister.setOnClickListener(new ClickEvent());
 	}
+	
+	class ClickEvent implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.btnQueryProduct:
+				onClick_QueryProduct();
+				break;
+			case R.id.btnDeliveryRegister:
+				onClick_DeliveryRegister();
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	void onClick_QueryProduct() {
+		Intent intent = new Intent(FunSelActivity.this,
+				QueProActivity.class);
+		startActivity(intent);
+	}
+	
+	void onClick_DeliveryRegister() {
+		Intent intent = new Intent(FunSelActivity.this,
+				DelRegActivity.class);
+		startActivity(intent);
+	}	
 }

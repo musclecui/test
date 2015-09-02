@@ -26,5 +26,9 @@
     <string name="light_on">开 灯</string>
     <string name="scan">扫 描</string>
     <string name="light_off">关 灯</string>
+    <string name="version">产品信息管理软件--移动端(测试版)</string>
+    <string name="query_product">查 询 产 品</string>
+    <string name="delivery_register">发 货 登 记</string>
+    <string name="nh_develop">佛山市南华仪器股份有限公司研制</string>
 
 </resources>

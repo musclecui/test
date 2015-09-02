@@ -1,57 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="10dip"
-    android:paddingRight="10dip"
+    android:background="#ffffff"
     tools:context=".UserLoginActivity" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/nhlogo" />
-
     <LinearLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="20dip"
-        android:paddingRight="20dip" >
-        
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        tools:context=".UserLoginActivity" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nhlogo1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip" >
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/user_name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textSize="20sp"
+                android:textColor="#0000ff"
+                android:text="@string/user_name" />
 
             <EditText
                 android:id="@+id/etUserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="@string/enter_user_name" />
+                android:hint="@string/enter_user_name" >
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="20dip"
-        android:paddingRight="20dip"  >
-            
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/password"
                 android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textSize="20sp"
+                android:textColor="#0000ff"
+                android:text="@string/password" />
 
             <EditText
                 android:id="@+id/etPassword"
@@ -61,36 +71,66 @@
                 android:ems="10"
                 android:hint="@string/enter_password"
                 android:inputType="textPassword" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/btn_red"
+            android:text="@string/login"
+            android:textColor="@color/btn_txt_white" />
 
     </LinearLayout>
+
+<!--     <LinearLayout -->
+<!--         android:id="@+id/bottom" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:layout_alignParentLeft="true" -->
+<!--         android:gravity="center" -->
+<!--         android:orientation="vertical" > -->
+
+<!--         <TextView -->
+<!--             android:id="@+id/version" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:text="@string/version" -->
+<!--             android:textColor="#3592e2" /> -->
+
+<!--     </LinearLayout> -->
     
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-    
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
+       <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login" />
-    
-       <RelativeLayout
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:layout_above="@id/bottom"
-           android:layout_alignParentLeft="true"
-           android:background="#ffffff"
-           android:paddingLeft="@dimen/activity_horizontal_margin"
-           android:paddingRight="@dimen/activity_horizontal_margin" >
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/nh_bottom"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-           <TextView
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:gravity="center"
-               android:singleLine="true"
-               android:text="@string/txt_version"
-               android:textColor="#3592e2"
-               android:textSize="20sp" />
-       </RelativeLayout>
+           <Space
+               android:layout_width="65sp"
+               android:layout_height="match_parent" />
 
-</LinearLayout>
+		<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nh_develop"
+            android:singleLine="true"
+            android:textColor="#0c8918"
+            android:shadowColor="#ffffff"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2" />
+    </LinearLayout> 
+
+</RelativeLayout>

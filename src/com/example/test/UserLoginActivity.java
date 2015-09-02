@@ -93,9 +93,9 @@ public class UserLoginActivity extends Activity {
 
 					// 保存最近成功登录用户
 					shaPreOpe.write("username", userName);
-
+					
 					Intent intent = new Intent(UserLoginActivity.this,
-							QueProActivity.class);
+							FunSelActivity.class);
 					startActivity(intent);
 					finish(); // 关闭本页面
 				} else {
